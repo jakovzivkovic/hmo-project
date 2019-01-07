@@ -1,8 +1,73 @@
 package hmo.project;
 
+
 public class Vehicle {
 	
-	private int length = 0;
-	private int serie = 0;
+	private int id;
+	private int length;
+	private int serie;
+	private int timeOfDeparture;
+	private int layoutType;
+	
+	
+
+	public Vehicle() {
+		super();
+	}
+	
+	public Vehicle(int id) {
+		super();
+		this.id = id;
+	}
+
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public int getLength() {
+		return length;
+	}
+	
+	public void setLength(int length) {
+		this.length = length;
+	}
+	
+	public int getSerie() {
+		return serie;
+	}
+	
+	public void setSerie(int serie) {
+		this.serie = serie;
+	}
+	
+	public int getTimeOfDeparture() {
+		return timeOfDeparture;
+	}
+
+	public void setTimeOfDeparture(int timeOfDeparture) {
+		this.timeOfDeparture = timeOfDeparture;
+	}
+
+	public int getLayoutType() {
+		return layoutType;
+	}
+
+	public void setLayoutType(int layoutType) {
+		this.layoutType = layoutType;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("Vehicle id: %d, length: %d, series: %d, layout type: %d, time of departure: %d ",
+				this.getId(),
+				this.getLength(),
+				this.getSerie(),
+				this.getLayoutType(),
+				this.getTimeOfDeparture());
+	}
 	
 }

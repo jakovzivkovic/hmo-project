@@ -1,0 +1,17 @@
+package hmo.project;
+
+public class Lane {
+	
+	private int id;
+	private int series;
+	private int length;
+	private Boolean blocked;
+	private Lane blockedBy;
+	
+	public Lane() {
+		super();
+	}
+	
+	
+	
+}
