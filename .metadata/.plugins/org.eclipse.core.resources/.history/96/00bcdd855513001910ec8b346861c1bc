@@ -74,6 +74,9 @@ public class Lane {
 		return vehicles;
 	}
 
+//	public void setBlockedBy(List<Lane> blockedBy) {
+//		this.blockedBy = blockedBy;
+//	}
 	
 	@Override
 	public String toString() {
