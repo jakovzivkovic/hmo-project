@@ -1,0 +1,78 @@
+package hmo.project;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Lane {
+	
+	private int id;
+	private int series = 0;
+	private int length;
+	private Boolean blocked = false;
+	private List<Lane> blockedBy;
+
+	public Lane() {
+		super();
+	}
+
+	public Lane(int id) {
+		super();
+		this.id = id;
+		
+		
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getSeries() {
+		return series;
+	}
+
+	public void setSeries(int series) {
+		this.series = series;
+	}
+
+	public int getLength() {
+		return length;
+	}
+
+	public void setLength(int length) {
+		this.length = length;
+	}
+
+	public Boolean getBlocked() {
+		return blocked;
+		
+	}
+
+	public void setBlocked(Boolean blocked) {
+		this.blocked = blocked;
+		blockedBy = new ArrayList<>();
+	}
+
+	public List<Lane> getBlockedBy() {
+		return blockedBy;
+	}
+
+//	public void setBlockedBy(List<Lane> blockedBy) {
+//		this.blockedBy = blockedBy;
+//	}
+	
+	@Override
+	public String toString() {
+		return String.format("Lane id: %d, legth: %d, blocked: %b	" ,
+				this.getId(),
+				this.getLength(),
+				this.getBlocked());
+		//String ls = this.getBlockedBy().toString();
+		//return str + ls; 
+	}
+	
+	
+}

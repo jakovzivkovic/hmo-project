@@ -5,7 +5,30 @@
   <link rel="self" href="https://spring.io/blog.atom" />
   <id>http://spring.io/blog.atom</id>
   <icon>https://spring.io/favicon.ico</icon>
-  <updated>2019-01-07T00:00:00Z</updated>
+  <updated>2019-01-08T13:27:51Z</updated>
+  <entry>
+    <title>Announcing General Availability of Spring Cloud Function - 2.0.0.RELEASE</title>
+    <link rel="alternate" href="https://spring.io/blog/2019/01/08/announcing-general-availability-of-spring-cloud-function-2-0-0-release" />
+    <category term="engineering" label="Engineering" />
+    <author>
+      <name>Oleg Zhurakousky</name>
+    </author>
+    <id>tag:spring.io,2019-01-08:3522</id>
+    <updated>2019-01-08T13:27:51Z</updated>
+    <content type="html">&lt;p&gt;We are pleased to announce general availability of the Spring Cloud Function - 2.0.0.RELEASE.&lt;/p&gt;
+&lt;p&gt;Individual modules of Spring Cloud Function 2.0.0.RELEASE are available for use in the &lt;a href="https://repo.spring.io/libs-release/org/springframework/cloud/"&gt;Spring Release&lt;/a&gt; repository as well as &lt;a href="https://repo.maven.apache.org/maven2/org/springframework/cloud/"&gt;Maven Central repository&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;This release encompasses the following:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href="https://spring.io/blog/2018/09/11/kotlin-support-in-spring-cloud-function"&gt;Kotlin support&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;New programming model for &lt;a href="https://spring.io/blog/2018/09/25/spring-cloud-function-2-0-and-azure-functions"&gt;Azure Functions&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Automatic (optional) export of &lt;code&gt;Supplier&lt;/code&gt; on startup in web adapter&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://spring.io/blog/2018/10/22/functional-bean-registrations-in-spring-cloud-function"&gt;Functional Bean Registrations&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Support for transparent type conversion for functions with input of type &lt;code&gt;Collection&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Builds on Spring Boot 2.1&lt;/li&gt;
+&lt;/ul&gt;&lt;h3&gt;&lt;a href="#how-can-you-help" class="anchor" name="how-can-you-help"&gt;&lt;/a&gt;How can you help?&lt;/h3&gt;
+&lt;p&gt;If you&amp;rsquo;re interested in helping out, check out the &lt;a href="https://github.com/spring-cloud/spring-cloud-function/labels/ideal-for-contribution"&gt;&amp;ldquo;ideal for contribution&amp;rdquo; tag&lt;/a&gt; in the issue repository. If you have general questions, please ask on &lt;a href="http://stackoverflow.com"&gt;stackoverflow.com&lt;/a&gt; using the &lt;a href="http://stackoverflow.com/tags/spring-cloud-function"&gt;&lt;code&gt;spring-cloud-function&lt;/code&gt; tag&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://cloud.spring.io/spring-cloud-function/"&gt;Project Page&lt;/a&gt; | &lt;a href="https://github.com/spring-cloud/spring-cloud-function"&gt;GitHub&lt;/a&gt; | &lt;a href="https://github.com/spring-cloud/spring-cloud-function/issues"&gt;Issues&lt;/a&gt; | &lt;a href="http://cloud.spring.io/spring-cloud-static/spring-cloud-function/2.0.0.RELEASE/"&gt;Documentation&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
   <entry>
     <title>Bootiful Azure: SQL-based data access with Microsoft SQL Server  (2/6)</title>
     <link rel="alternate" href="https://spring.io/blog/2019/01/07/bootiful-azure-sql-based-data-access-with-microsoft-sql-server-2-6" />
@@ -1246,96 +1269,5 @@ dependencies {&#xD;
     ...&#xD;
 }
 &lt;/code&gt;&lt;/pre&gt;</content>
-  </entry>
-  <entry>
-    <title>Spring Data R2DBC 1.0 M1 released</title>
-    <link rel="alternate" href="https://spring.io/blog/2018/12/12/spring-data-r2dbc-1-0-m1-released" />
-    <category term="releases" label="Releases" />
-    <author>
-      <name>Mark Paluch</name>
-    </author>
-    <id>tag:spring.io,2018-12-11:3494</id>
-    <updated>2018-12-12T15:55:00Z</updated>
-    <content type="html">&lt;p&gt;It’s my pleasure to announce the first milestone of Spring Data R2DBC. Spring Data R2DBC is Spring&amp;rsquo;s client project for &lt;a href="https://r2dbc.io"&gt;R2DBC&lt;/a&gt;. With Spring Data R2DBC you get end to end reactive ad-hoc query execution and Spring Data repositories for relational databases.&lt;/p&gt;
-&lt;p&gt;Spring Data R2DBC embraces functional-reactive integration of relational databases by providing &lt;code&gt;DatabaseClient&lt;/code&gt; as its central abstraction. The following example shows how to bootstrap &lt;code&gt;DatabaseClient&lt;/code&gt; without spinning up a Spring context:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="prettyprint java"&gt;PostgresqlConnectionFactory connFactory = new PostgresqlConnectionFactory(&#xD;
-  PostgresqlConnectionConfiguration.builder()&#xD;
-    .host(…)&#xD;
-    .database(…)&#xD;
-    .username(…)&#xD;
-    .password(…)&#xD;
-    .build());&#xD;
-&#xD;
-DatabaseClient databaseClient = DatabaseClient.create(connFactory);
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Spring Data R2DBC is built on top of R2DBC SPI so you can plug in various drivers (as of R2DBC 1.0 M6):&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href="https://github.com/r2dbc/r2dbc-postgresql"&gt;Postgres&lt;/a&gt; (&lt;code&gt;io.r2dbc:r2dbc-postgresql&lt;/code&gt;)&lt;/li&gt;
-  &lt;li&gt;&lt;a href="https://github.com/r2dbc/r2dbc-h2"&gt;H2&lt;/a&gt; (&lt;code&gt;io.r2dbc:r2dbc-h2&lt;/code&gt;)&lt;/li&gt;
-  &lt;li&gt;&lt;a href="https://github.com/r2dbc/r2dbc-mssql"&gt;Microsoft SQL Server&lt;/a&gt; (&lt;code&gt;io.r2dbc:r2dbc-mssql&lt;/code&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;This Spring Data R2DBC milestone ships with the following initial feature set:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;code&gt;DatabaseClient&lt;/code&gt; as gateway to reactive generic SQL execution.&lt;/li&gt;
-  &lt;li&gt;Reactive transaction support through &lt;code&gt;TransactionalDatabaseClient&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Support functions such as &lt;code&gt;select()&lt;/code&gt; and &lt;code&gt;insert()&lt;/code&gt; to be used with mapped objects.&lt;/li&gt;
-  &lt;li&gt;Dialect support for Postgres, H2, and Microsoft SQL Server.&lt;/li&gt;
-  &lt;li&gt;Java Configuration support with &lt;code&gt;AbstractR2dbcConfiguration&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Reactive Repository support through &lt;code&gt;@EnableR2dbcRepositories&lt;/code&gt; and annotated &lt;code&gt;@Query&lt;/code&gt; methods.&lt;/li&gt;
-  &lt;li&gt;Exception Translation for R2DBC Exceptions into &lt;a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/data-access.html#dao-exceptions"&gt;Spring&amp;rsquo;s DAO Exception hierarchy&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Here&amp;rsquo;s a collection of &lt;a href="https://github.com/spring-projects/spring-data-examples/tree/master/r2dbc/example"&gt;examples&lt;/a&gt; for &lt;code&gt;DatabaseClient&lt;/code&gt; usage. Note also the usage of native parameter bind markers:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="prettyprint java"&gt;Mono&amp;lt;Integer&amp;gt; count = databaseClient.execute()&#xD;
-        .sql(&amp;quot;INSERT INTO person (id, firstname, lastname) VALUES($1, $2, $3)&amp;quot;)&#xD;
-        .bind(&amp;quot;$1&amp;quot;, 42055)&#xD;
-        .bind(&amp;quot;$2&amp;quot;, &amp;quot;Walter&amp;quot;)&#xD;
-        .bindNull(&amp;quot;$3&amp;quot;, String.class)&#xD;
-        .fetch()&#xD;
-        .rowsUpdated();&#xD;
-&#xD;
-Flux&amp;lt;Map&amp;lt;String, Object&amp;gt;&amp;gt; rows = databaseClient.select()&#xD;
-        .from(&amp;quot;person&amp;quot;)&#xD;
-        .orderBy(Sort.by(desc(&amp;quot;id&amp;quot;)))&#xD;
-        .fetch()&#xD;
-        .all();&#xD;
-&#xD;
-Flux&amp;lt;Person&amp;gt; rows = databaseClient.select()&#xD;
-        .from(Person.class)&#xD;
-        .orderBy(Sort.by(desc(&amp;quot;id&amp;quot;)))&#xD;
-        .fetch()&#xD;
-        .all();
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;If you&amp;rsquo;re already familiar with Spring Data&amp;rsquo;s Repository abstraction, then you will recognize that Spring Data R2DBC repositories follow the exact same idea of extending &lt;code&gt;ReactiveCrudRepository&lt;/code&gt;:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="prettyprint java"&gt;interface PersonRepository extends ReactiveCrudRepository&amp;lt;Person, Integer&amp;gt; {&#xD;
-&#xD;
-  @Query(&amp;quot;SELECT * FROM person WHERE firstname like $1&amp;quot;)&#xD;
-  Flux&amp;lt;Person&amp;gt; findByFirstNameContains(String firstname);&#xD;
-&#xD;
-  @Query(&amp;quot;SELECT * FROM legoset WHERE firstname = $1 AND lastname = $2&amp;quot;)&#xD;
-  Mono&amp;lt;Person&amp;gt; findByFirstnameAndLastname(String firstname, String lastname);&#xD;
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;You can obtain Spring Data R2DBC 1.0 M1 from our milestone repository. To do so, include the following lines in your &lt;code&gt;pom.xml&lt;/code&gt; file:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="prettyprint xml"&gt;&amp;lt;repository&amp;gt;&#xD;
-  &amp;lt;id&amp;gt;spring-libs-milestone&amp;lt;/id&amp;gt;&#xD;
-  &amp;lt;url&amp;gt;https://repo.spring.io/libs-milestone&amp;lt;/url&amp;gt;&#xD;
-&amp;lt;/repository&amp;gt;&#xD;
-&#xD;
-&amp;lt;dependencies&amp;gt;&#xD;
-  &amp;lt;dependency&amp;gt;&#xD;
-    &amp;lt;groupId&amp;gt;org.springframework.data&amp;lt;/groupId&amp;gt;&#xD;
-    &amp;lt;artifactId&amp;gt;spring-data-r2dbc&amp;lt;/artifactId&amp;gt;&#xD;
-    &amp;lt;version&amp;gt;1.0.0.M1&amp;lt;/version&amp;gt;&#xD;
-  &amp;lt;/dependency&amp;gt;&#xD;
-&amp;lt;/dependencies&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;We&amp;rsquo;re excited to hear what you think about Spring Data R2DBC. Get in touch with &lt;a href="https://twitter.com/SpringData"&gt;@SpringData&lt;/a&gt;!&lt;/p&gt;
-&lt;p&gt;To round things off, here are links to the changelog, GitHub repository, and examples:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;Project Repository: &lt;a href="https://github.com/spring-projects/spring-data-r2dbc"&gt;github.com/spring-projects/spring-data-r2dbc&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;Issue Tracker: &lt;a href="https://github.com/spring-projects/spring-data-r2dbc/issues"&gt;github.com/spring-projects/spring-data-r2dbc/issues&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;Examples: &lt;a href="https://github.com/spring-projects/spring-data-examples/tree/master/r2dbc/example"&gt;github.com/spring-projects/spring-data-examples&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href="https://repo.spring.io/libs-milestone/org/springframework/data/spring-data-r2dbc/1.0.0.M1/"&gt;Artifacts&lt;/a&gt; - &lt;a href="https://docs.spring.io/spring-data/r2dbc/docs/1.0.0.M1/api"&gt;Javadoc&lt;/a&gt; - &lt;a href="https://docs.spring.io/spring-data/r2dbc/docs/1.0.0.M1/reference/html/"&gt;Documentation&lt;/a&gt; - &lt;a href="https://docs.spring.io/spring-data/r2dbc/docs/1.0.0.M1/changelog.txt"&gt;Changelog&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content>
   </entry>
 </feed>

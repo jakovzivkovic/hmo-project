@@ -4,10 +4,11 @@ package hmo.project;
 public class Vehicle {
 	
 	private int id;
-	private int length;
+	private double length;
 	private int serie;
 	private int timeOfDeparture;
 	private int layoutType;
+	private int numberOfZeros = 0;
 	
 	
 
@@ -28,11 +29,11 @@ public class Vehicle {
 		this.id = id;
 	}
 	
-	public int getLength() {
+	public double getLength() {
 		return length;
 	}
 	
-	public void setLength(int length) {
+	public void setLength(double length) {
 		this.length = length;
 	}
 	
@@ -60,13 +61,20 @@ public class Vehicle {
 		this.layoutType = layoutType;
 	}
 	
+	public int getNumberOfZeros() {
+		return numberOfZeros;
+	}
+
+	public void setNumberOfZeros(int numberOfZeros) {
+		this.numberOfZeros = numberOfZeros;
+	}
+	
 	@Override
 	public String toString() {
-		return String.format("Vehicle id: %d, length: %d, series: %d, layout type: %d, time of departure: %d ",
+		return String.format("ID: %d,l: %.1f, s: %d, tod: %d ",
 				this.getId(),
 				this.getLength(),
 				this.getSerie(),
-				this.getLayoutType(),
 				this.getTimeOfDeparture());
 	}
 	

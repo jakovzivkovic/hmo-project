@@ -7,9 +7,12 @@ public class Lane {
 	
 	private int id;
 	private int series = 0;
-	private int length;
+	private double length;
+	private double currentLength = 0;
 	private Boolean blocked = false;
 	private List<Lane> blockedBy;
+	private List<Vehicle> vehicles;
+
 
 	public Lane() {
 		super();
@@ -18,8 +21,8 @@ public class Lane {
 	public Lane(int id) {
 		super();
 		this.id = id;
-		
-		
+		blockedBy = new ArrayList<>();
+		vehicles = new ArrayList<>();
 	}
 
 	public int getId() {
@@ -38,11 +41,11 @@ public class Lane {
 		this.series = series;
 	}
 
-	public int getLength() {
+	public double getLength() {
 		return length;
 	}
 
-	public void setLength(int length) {
+	public void setLength(double length) {
 		this.length = length;
 	}
 
@@ -53,11 +56,22 @@ public class Lane {
 
 	public void setBlocked(Boolean blocked) {
 		this.blocked = blocked;
-		blockedBy = new ArrayList<>();
 	}
 
 	public List<Lane> getBlockedBy() {
 		return blockedBy;
+	}
+	
+	public double getCurrentLength() {
+		return currentLength;
+	}
+
+	public void setCurrentLength(double currentLength) {
+		this.currentLength = currentLength;
+	}
+	
+	public List<Vehicle> getVehicles() {
+		return vehicles;
 	}
 
 //	public void setBlockedBy(List<Lane> blockedBy) {
@@ -66,12 +80,10 @@ public class Lane {
 	
 	@Override
 	public String toString() {
-		return String.format("Lane id: %d, legth: %d, blocked: %b	" ,
+		return String.format("Lane id: %d, length: %f, blocked: %b	" ,
 				this.getId(),
 				this.getLength(),
 				this.getBlocked());
-		//String ls = this.getBlockedBy().toString();
-		//return str + ls; 
 	}
 	
 	
