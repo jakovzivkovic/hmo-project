@@ -46,7 +46,7 @@ public class Main {
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		
-		String file = "/Users/Jakov/Documents/Faks/Diplomski/3. semestar/HMO/hmo-project/Public Transport Parking/resources/instanca3.txt";
+		String file = "C:\\Users\\Marko\\Desktop\\hmo-project\\hmo-project\\Public Transport Parking\\resources\\instanca1.txt";
 		Scanner scanner = new Scanner(new File(file));
 		parseInstanceFile(scanner);
 		parkingAlgorithm();
@@ -61,14 +61,16 @@ public class Main {
 					return Integer.valueOf(v2.getTimeOfDeparture()).compareTo(Integer.valueOf(v1.getTimeOfDeparture()));
 		        }
 		    });
-			System.out.printf("%4d.  ",i+1);
+			System.out.printf("%2d. ",i+1);
 			System.out.print(lane.getVehicles());
-			System.out.printf("remaing: %.1f\n", lane.getLength()-lane.getCurrentLength());
+			System.out.printf(" remaining: %.1f\n", lane.getLength()-lane.getCurrentLength());
 			
 			i++;
 		}
+		
 		Boolean isFeasible = isFeasible();
-		System.out.printf("izvodljivost rjesenja: %b\n",isFeasible);
+		
+		System.out.printf("Izvodljivost rjesenja: %b\n",isFeasible);
 		functionEvaluation();
 		firstGlobalGoal = (f1 * p1) + (f2 * p2) + (f3 * p3);
 		secondGlobalGoal = (g1 * r1) + (g2 * r2) + (g3 * r3);
@@ -86,7 +88,7 @@ public class Main {
 		System.out.printf("r1: %.4f\n",r1);
 		System.out.printf("r2: %.4f\n",r2);
 		System.out.printf("r3: %.4f\n",r3);
-		System.out.printf("FirstGlobalGoal: %.4f, SecondGlobalGoal: %.4f\nratio: %.4f"
+		System.out.printf("FirstGlobalGoal: %.4f, SecondGlobalGoal: %.4f\nScore: %.4f"
 				,firstGlobalGoal
 				,secondGlobalGoal
 				,secondGlobalGoal/firstGlobalGoal);
@@ -185,8 +187,11 @@ public class Main {
 			}
 			if(lane.getBlocked() == true){
 				for(Lane blockedLane : lane.getBlockedBy()){
+					if(lane.getVehicles().size()== 0 || blockedLane.getVehicles().size() == 0) {
+						continue;
+					}
 					if(lane.getVehicles().get(lane.getVehicles().size()-1).getTimeOfDeparture() < blockedLane.getVehicles().get(0).getTimeOfDeparture()){
-						System.out.printf("Blokirajuca traka %d ima vece vrijeme izlaska od one kojom je blokirana: %d",blockedLane.getId(),lane.getId());
+						System.out.printf("Blokirajuca traka %d ima vece vrijeme izlaska od one kojom je blokirana: %d\n",blockedLane.getId(),lane.getId());
 						return false;
 					}
 				}
@@ -197,7 +202,7 @@ public class Main {
 			return false;
 		}
 		if(vehicleIdList.size() < numberOfVehicles){
-			System.out.printf("Fali %d vozila", numberOfVehicles-vehicleIdList.size());
+			System.out.printf("Nedostaje %d vozilo/a!\n", numberOfVehicles-vehicleIdList.size());
 			return false;
 		}
 		return true;
@@ -218,8 +223,7 @@ public class Main {
 				return Integer.valueOf(v2.getTimeOfDeparture()).compareTo(Integer.valueOf(v1.getTimeOfDeparture()));
 	        }
 	    });
-		
-		
+				
 		for( Vehicle vehicle: sortedByTime){
 			for(Lane lane : lanes){
 				if(lane.getBlocked()){
@@ -261,14 +265,15 @@ public class Main {
 	        public int compare(Vehicle v1, Vehicle v2) {
 	        	int value1 = Integer.valueOf(v2.getNumberOfZeros()).compareTo(Integer.valueOf(v1.getNumberOfZeros()));
 	            if (value1 == 0) {
-	                int value2 = Integer.valueOf(v2.getTimeOfDeparture()).compareTo(Integer.valueOf(v1.getTimeOfDeparture()));;
+	                int value2 = Integer.valueOf(v2.getSerie()).compareTo(Integer.valueOf(v1.getSerie()));;
 	                return value2;
 	            }
 	            return value1;
 	        }
 	    });
 		
-
+		Collections.shuffle(lanes);
+		
 		for(Vehicle vehicle : remaining){
 			for (Lane lane : lanes) {
 				if(lane.getBlocked() == false){
@@ -297,9 +302,7 @@ public class Main {
 					}
 				}
 			}
-		}
-		
-		
+		}	
 	}
 
 	private static void parseInstanceFile(Scanner scanner) {
@@ -333,6 +336,7 @@ public class Main {
 				}
 			}
 		}
+		
 		int[] laneLengths = new int[numberOfLanes];
 		for(int i = 0; i < numberOfLanes; i++){
 			laneLengths[i] = Integer.valueOf(scanner.next());
@@ -382,10 +386,6 @@ public class Main {
 					blockedTracks.put(Integer.valueOf(splited[i]), list);
 				}
 			}
-		}
-		
-		
-		
+		}	
 	}
-
 }
