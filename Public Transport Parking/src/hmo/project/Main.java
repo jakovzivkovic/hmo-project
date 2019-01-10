@@ -46,7 +46,7 @@ public class Main {
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		
-		String file = "C:\\Users\\Marko\\Desktop\\hmo-project\\hmo-project\\Public Transport Parking\\resources\\instanca1.txt";
+		String file = "C:\\Users\\Marko\\Desktop\\hmo-project\\hmo-project\\Public Transport Parking\\resources\\instanca3.txt";
 		Scanner scanner = new Scanner(new File(file));
 		parseInstanceFile(scanner);
 		parkingAlgorithm();
