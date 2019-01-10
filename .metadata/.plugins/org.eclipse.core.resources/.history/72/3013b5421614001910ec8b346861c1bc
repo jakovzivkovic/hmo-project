@@ -1,0 +1,346 @@
+package hmo.project;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
+
+
+
+public class Main {
+	
+	public static List<Vehicle> vehicles = new ArrayList<>();
+	public static List<Lane> lanes = new ArrayList<>();
+	public static int numberOfVehicles;
+	public static int numberOfLanes;
+	public static Map<Integer,List<Integer>> blockedTracks;
+	public static int[][] matrix;
+	public static int lanesCapacity = 0;
+	public static int vehiclesLength = 0;
+	
+	public static double f1 = 0;
+	public static double f2 = 0;
+	public static double f3 = 0;
+	public static double p1 = 0;
+	public static double p2 = 0;
+	public static double p3 = 0;
+	
+	public static double g1 = 0;
+	public static double g2 = 0;
+	public static double g3 = 0;
+	public static double r1 = 0;
+	public static double r2 = 0;
+	public static double r3 = 0;
+	
+	public static double firstGlobalGoal;
+	public static double secondGlobalGoal;
+	
+	
+	
+	public static void main(String[] args) throws FileNotFoundException {
+		
+		String file = "/Users/Jakov/Documents/Faks/Diplomski/3. semestar/HMO/hmo-project/Public Transport Parking/resources/instanca1.txt";
+		//String file = args[0];
+		Scanner scanner = new Scanner(new File(file));
+		parseInstanceFile(scanner);
+		parkingAlgorithm();
+		
+		scanner.close();
+	
+		int i=0;
+		for (Lane lane : lanes){
+			Collections.sort(lane.getVehicles(), new Comparator<Vehicle>() {
+
+		        public int compare(Vehicle v1, Vehicle v2) {
+					return Integer.valueOf(v2.getTimeOfDeparture()).compareTo(Integer.valueOf(v1.getTimeOfDeparture()));
+		        }
+		    });
+			System.out.printf("%d.  ",i+1);
+			System.out.print(lane.getVehicles());
+			System.out.printf("remaing: %.1f\n", lane.getLength()-lane.getCurrentLength());
+			
+			i++;
+		}
+		Boolean isFeasible = isFeasible();
+		System.out.printf("izvodljivost rjesenja: %b\n",isFeasible);
+		functionEvaluation();
+		firstGlobalGoal = (f1 * p1) + (f2 * p2) + (f3 * p3);
+		
+		System.out.println(f1);
+		System.out.println(f2);
+		System.out.println(f3);
+		System.out.println(p1);
+		System.out.println(p2);
+		System.out.println(p3);
+		System.out.println(firstGlobalGoal);
+	}
+
+	private static void functionEvaluation() {
+		List<Lane> used= new ArrayList<>();
+
+		for(Lane lane : lanes){
+			if(!lane.getVehicles().isEmpty()){
+				used.add(lane);
+			}
+		}
+		for(int i = 0; i < used.size() - 1; i++){
+		
+			if(lanes.get(i).getSeries() != lanes.get(i+1).getSeries()){
+				f1 += 1;
+			}
+		}
+		f2 = used.size();
+		p1 = 1./(f2-1);
+		p2 = 1./numberOfLanes;
+		for(Lane lane: used){
+			System.out.println(lane);
+			f3 += lane.getLength()-lane.getCurrentLength();
+		}
+		p3 = 1./(lanesCapacity-vehiclesLength);
+	
+		
+	}
+
+	private static  Boolean isFeasible() {
+		Set<Integer> vehicleIdSet = new HashSet<>();
+		List<Integer> vehicleIdList = new ArrayList<>();
+		
+		for(Lane lane : lanes){
+			for(Vehicle vehicle : lane.getVehicles()){
+				vehicleIdList.add(vehicle.getId());
+				vehicleIdSet.add(vehicle.getId());
+				if (vehicle.getSerie() != lane.getSeries()){
+					System.out.printf("Vozio &d ima razlictu seriju od trake %d\n", vehicle.getId(),lane.getId());
+					return false;
+				}
+				if(matrix[vehicle.getId()-1][lane.getId()-1] == 0){
+					System.out.printf("Vozilo %d se ne moze parkirati u traku %d",vehicle.getId(),lane.getId());
+				}
+				
+			}
+			
+			if(lane.getLength() < lane.getCurrentLength()){
+				System.out.printf("U traci %d ima previse vozila\n", lane.getId() );
+				return false;
+			}
+			for(int i=0; i < lane.getVehicles().size()-1; i++){
+				if(lane.getVehicles().get(i).getTimeOfDeparture() < lane.getVehicles().get(i+1).getTimeOfDeparture()){
+					System.out.printf("Vozilo %d ima vece vrijeme izlaska od vozila %d koji se nalazi ispred njega u traci\n",
+							lane.getVehicles().get(i+1).getId(),
+							lane.getVehicles().get(i).getId());
+					return false;
+				}
+			}
+			if(lane.getBlocked() == true){
+				for(Lane blockedLane : lane.getBlockedBy()){
+					if(lane.getVehicles().get(lane.getVehicles().size()-1).getTimeOfDeparture() < blockedLane.getVehicles().get(0).getTimeOfDeparture()){
+						System.out.printf("Blokirajuca traka %d ima vece vrijeme izlaska od one kojom je blokirana: %d",blockedLane.getId(),lane.getId());
+						return false;
+					}
+				}
+			}
+		}
+		if (vehicleIdSet.size() < vehicleIdList.size()){
+			System.out.println("Ima dupliciranih vozila.");
+			return false;
+		}
+		if(vehicleIdList.size() < numberOfVehicles){
+			System.out.printf("Fali %d vozila", numberOfVehicles-vehicleIdList.size());
+			return false;
+		}
+		return true;
+	}
+
+	private static void parkingAlgorithm() {
+		List<Vehicle> sortedByTime = new ArrayList<>();
+		List<Vehicle> remaining = new ArrayList<>();
+		List<Vehicle> remove = new ArrayList<>();
+		
+		sortedByTime.addAll(vehicles);
+		remaining.addAll(vehicles);
+		
+		
+		Collections.sort(sortedByTime, new Comparator<Vehicle>() {
+
+	        public int compare(Vehicle v1, Vehicle v2) {
+				return Integer.valueOf(v2.getTimeOfDeparture()).compareTo(Integer.valueOf(v1.getTimeOfDeparture()));
+	        }
+	    });
+		
+		
+		for( Vehicle vehicle: sortedByTime){
+			for(Lane lane : lanes){
+				if(lane.getBlocked()){
+					if(matrix[vehicle.getId()-1][lane.getId()-1] == 1){
+						if(lane.getCurrentLength() == 0){
+							if(lane.getCurrentLength() + vehicle.getLength() <= lane.getLength() ){
+									lane.setSeries(vehicle.getSerie());
+									lane.setCurrentLength(vehicle.getLength());
+									lane.getVehicles().add(vehicle);
+									remove.add(vehicle);
+									break;
+								
+							}else{
+								continue;
+							}
+						}else{
+							if(lane.getCurrentLength() + vehicle.getLength() + 0.5 <= lane.getLength() && vehicle.getSerie() == lane.getSeries()){
+								lane.setCurrentLength(lane.getCurrentLength() + vehicle.getLength() + 0.5);
+								lane.getVehicles().add(vehicle);
+								remove.add(vehicle);
+								break;
+							}else{
+								continue;
+							}
+						}
+					}else{
+						continue;
+					}
+				}else{
+					
+				}
+			}
+				
+		}
+		 
+		remaining.removeAll(remove);
+		
+		Collections.sort(remaining, new Comparator<Vehicle>() {
+	        public int compare(Vehicle v1, Vehicle v2) {
+	        	int value1 = Integer.valueOf(v2.getNumberOfZeros()).compareTo(Integer.valueOf(v1.getNumberOfZeros()));
+	            if (value1 == 0) {
+	                int value2 = Integer.valueOf(v2.getTimeOfDeparture()).compareTo(Integer.valueOf(v1.getTimeOfDeparture()));;
+	                return value2;
+	            }
+	            return value1;
+	        }
+	    });
+		
+
+		for(Vehicle vehicle : remaining){
+			for (Lane lane : lanes) {
+				if(lane.getBlocked() == false){
+					if(matrix[vehicle.getId()-1][lane.getId()-1] == 1){
+						if(lane.getCurrentLength() == 0){
+							if(lane.getCurrentLength() + vehicle.getLength() <= lane.getLength() ){
+									lane.setSeries(vehicle.getSerie());
+									lane.setCurrentLength(vehicle.getLength());
+									lane.getVehicles().add(vehicle);
+									break;
+								
+							}else{
+								continue;
+							}
+						}else{
+							if(lane.getCurrentLength() + vehicle.getLength() + 0.5 <= lane.getLength() && vehicle.getSerie() == lane.getSeries()){
+								lane.setCurrentLength(lane.getCurrentLength() + vehicle.getLength() + 0.5);
+								lane.getVehicles().add(vehicle);
+								break;
+							}else{
+								continue;
+							}
+						}
+					}else{
+						continue;
+					}
+				}
+			}
+		}
+		
+		
+	}
+
+	private static void parseInstanceFile(Scanner scanner) {
+		
+		numberOfVehicles = Integer.valueOf(scanner.nextLine());
+		numberOfLanes = Integer.valueOf(scanner.nextLine());
+		
+		double[] vehiclesLengths  =new double[numberOfVehicles];
+		for (int i=0; i < numberOfVehicles; i++){
+			vehiclesLengths[i] = Double.valueOf(scanner.next());
+			vehiclesLength += vehiclesLengths[i];
+			Vehicle vehicle = new Vehicle(i+1);
+			vehicle.setLength(vehiclesLengths[i]);
+			vehicles.add(vehicle);
+		}
+		
+		int[] vehiclesSeries = new int[numberOfVehicles];
+		for (int i=0; i<numberOfVehicles; i++){
+			vehiclesSeries[i] = Integer.valueOf(scanner.next());
+			Vehicle vehicle = vehicles.get(i);
+			vehicle.setSerie(vehiclesSeries[i]);
+			vehicles.set(i, vehicle);
+		}
+		
+		matrix = new int[numberOfVehicles][numberOfLanes];
+		for(int i = 0; i < numberOfVehicles; i++){
+			for(int j=0; j < numberOfLanes;j ++){
+				matrix[i][j] = Integer.valueOf(scanner.next());
+				if(matrix[i][j]==0){
+					vehicles.get(i).setNumberOfZeros(vehicles.get(i).getNumberOfZeros()+1);
+				}
+			}
+		}
+		int[] laneLengths = new int[numberOfLanes];
+		for(int i = 0; i < numberOfLanes; i++){
+			laneLengths[i] = Integer.valueOf(scanner.next());
+			lanesCapacity += laneLengths[i];
+			Lane lane = new Lane(i+1);
+			lane.setLength(laneLengths[i]);
+			lanes.add(lane);
+		}
+		
+		int[] vehiclesTimeOfDeparture = new int[numberOfVehicles];
+		for (int i=0; i<numberOfVehicles; i++){
+			vehiclesTimeOfDeparture[i] = Integer.valueOf(scanner.next());
+			Vehicle vehicle = vehicles.get(i);
+			vehicle.setTimeOfDeparture(vehiclesTimeOfDeparture[i]);
+			vehicles.set(i, vehicle);
+		}
+		
+		int[] vehiclesLayoutType = new int[numberOfVehicles];
+		for (int i=0; i<numberOfVehicles; i++){
+			vehiclesLayoutType[i] = Integer.valueOf(scanner.next());
+			Vehicle vehicle = vehicles.get(i);
+			vehicle.setLayoutType(vehiclesLayoutType[i]);
+			vehicles.set(i, vehicle);
+		}
+		scanner.nextLine();
+		scanner.nextLine();
+		blockedTracks = new HashMap<>(); 
+		while(scanner.hasNextLine()){
+			String line = scanner.nextLine();
+			String[] splited = line.split(" ");
+			
+			for (int i = 1; i < splited.length; i++ ){
+				Lane lane = lanes.get(Integer.valueOf(splited[i])-1);
+				if(lane.getBlocked() == false){
+					lane.setBlocked(true);
+				}
+				lane.getBlockedBy().add(lanes.get(Integer.valueOf(splited[0])-1));
+				lanes.set(Integer.valueOf(splited[i])-1, lane);
+				
+				if (blockedTracks.containsKey(Integer.valueOf(splited[i])) ){
+					List<Integer> list = blockedTracks.get(Integer.valueOf(splited[i]));
+					list.add(Integer.valueOf(splited[0]));
+					blockedTracks.put(Integer.valueOf(splited[i]), list);	
+				}else{
+					List<Integer> list = new ArrayList<>();
+					list.add(Integer.valueOf(splited[0]));
+					blockedTracks.put(Integer.valueOf(splited[i]), list);
+				}
+			}
+		}
+		
+		
+		
+	}
+
+}

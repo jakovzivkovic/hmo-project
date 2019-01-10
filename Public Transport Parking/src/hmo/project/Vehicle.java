@@ -71,11 +71,12 @@ public class Vehicle {
 	
 	@Override
 	public String toString() {
-		return String.format("ID: %d,l: %.1f, s: %d, tod: %d ",
+		return String.format("ID: %d,l: %.1f, s: %d, tod: %d, lt: %d",
 				this.getId(),
 				this.getLength(),
 				this.getSerie(),
-				this.getTimeOfDeparture());
+				this.getTimeOfDeparture(),
+				this.getLayoutType());
 	}
 	
 }
